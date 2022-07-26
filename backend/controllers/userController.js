@@ -44,3 +44,19 @@ module.exports.login = async (req, res, next) => {
     console.error(error);
   }
 };
+module.exports.setAvatar = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const avatarImage = req.body.image;
+    const userData = await userSchema.findByIdAndUpdate(userId, {
+      isAvatarImageSet: true,
+      avatarImage,
+    });
+    return res.json({
+      isSet: userData.isAvatarImageSet,
+      image: userData.avatarImage,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};

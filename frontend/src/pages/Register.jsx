@@ -22,6 +22,15 @@ function Register() {
         draggable:true,
         theme:'dark'
     }
+    useEffect(() => {
+        if(localStorage.getItem('chat-app-user')){
+         navigate('/')
+        }
+        else{
+         navigate('/register')
+        }
+        //eslint-disable-next-line
+       }, [])
     const handleSubmit =async (e)=>{
         e.preventDefault();
         if(handleValidation()){

@@ -20,6 +20,16 @@ function Login() {
         draggable:true,
         theme:'dark'
     }
+    useEffect(() => {
+     if(localStorage.getItem('chat-app-user')){
+      navigate('/')
+     }
+     else{
+      navigate('/login')
+     }
+     //eslint-disable-next-line
+    }, [])
+    
     const handleSubmit =async (e)=>{
         e.preventDefault();
         if(handleValidation()){
@@ -39,15 +49,14 @@ function Login() {
     const handleValidation =  ()=>{
         const {password,username} = value;
      
-         if(username.length === ""){
-            toast.error('Please Enter Your Email',toastOptions)
+         if(username === ""){
+            toast.error('Please Enter Your Username',toastOptions)
             return false;
         }
-        else if(password.length ===''){
+        else if(password ===''){
             toast.error('Password Cannot Be Blank',toastOptions)
             return false;
         }
-       
         return true;
     }
     const handleChange = (e)=>{

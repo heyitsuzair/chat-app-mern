@@ -3,6 +3,8 @@ import { useState,useEffect } from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import logo from '../assets/img/logo.png'
+import {ToastContainer,toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function Register() {
     const [value, setValue] = useState({
         username:'',
@@ -10,15 +12,36 @@ function Register() {
         password:'',
         cpassword:''
     })
+    const toastOptions = {
+        position:'top-right',
+        autoClose:3000,
+        pauseOnHover:true,
+        draggable:true,
+        theme:'dark'
+    }
     const handleSubmit = (e)=>{
-        e.preventDefualt();
-        alert('form');
+        e.preventDefault();
+        handleValidation();
     }
     const handleValidation =  ()=>{
         const {password,cpassword,username,email} = value;
         if(cpassword!==password){
-            
+            toast.error('Password And Confrim Password Should Be Same',toastOptions);
+            return false;
         }
+        else if(username.length < 3){
+            toast.error('Username Should Be Greater Than 3 Characters',toastOptions)
+            return false;
+        }
+        else if(password.length < 8){
+            toast.error('Password Should Be Equal Or  Greater Than 8 Characters',toastOptions)
+            return false;
+        }
+        else if(email === ''){
+            toast.error('Email Is Required',toastOptions)
+            return false;
+        }
+        return true;
     }
     const handleChange = (e)=>{
         setValue({...value,[e.target.name]:e.target.value});
@@ -26,7 +49,7 @@ function Register() {
   return (
     <>
         <FormContainer>
-            <form action="" onSubmit={handleSubmit}>
+            <form onSubmit={(e)=>handleSubmit(e)}>
                 <div className="brand">
                     <img src={logo} alt="" />
                     <h1>Chat App</h1>
@@ -39,6 +62,7 @@ function Register() {
                 <span>Already Have An Account? <Link to="/login">Login</Link> </span>
             </form>
         </FormContainer>
+        <ToastContainer/>
     </>
   )
 }

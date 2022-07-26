@@ -18,8 +18,28 @@ module.exports.register = async (req, res, next) => {
       username,
       password: hashPass,
     });
-    delete userSchema.password;
+    delete insertUser.password;
     return res.json({ status: true, insertUser });
+  } catch (error) {
+    console.error(error);
+  }
+};
+module.exports.login = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await userSchema.findOne({ username });
+    if (!user) {
+      return res.json({ msg: "Invalid Credientials", status: false });
+    }
+
+    const passValid = await bcrypt.compare(password, user.password);
+    if (!passValid) {
+      return res.json({ msg: "Invalid Credientials", status: false });
+    }
+    delete user.password;
+
+    return res.json({ status: true, user });
   } catch (error) {
     console.error(error);
   }
